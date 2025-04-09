@@ -49,7 +49,7 @@ pip install --user jsonschema
 pip install --user jinja2
 ```
 
-#### (Posible error)
+#### (Posible error !)
 Si se presenta un error relacionado con pip3, ejecute los siguinetes comandos:
 
 ```
@@ -58,8 +58,8 @@ pip3 install empy==3.3.4
 ```
 
 
-### Build Micro DDS
-As mentioned in the [PX4 Docs](https://docs.px4.io/main/en/ros/ros2_comm.html#setup-micro-xrce-dds-agent-client) run this code in order to build MicroDDS on your machine
+### Construir Micro DDS
+Como se menciona en el [PX4 Docs](https://docs.px4.io/main/en/ros/ros2_comm.html#setup-micro-xrce-dds-agent-client) Ejecute este código para crear MicroDDS en su máquina
 
 ```
 git clone https://github.com/eProsima/Micro-XRCE-DDS-Agent.git
