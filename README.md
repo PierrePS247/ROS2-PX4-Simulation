@@ -1,63 +1,62 @@
 
-# ROS2_PX4_Offboard_Example
+# ROS2-PX4-Simulation
 
-## Overview
-This tutorial explains at a basic level how to use ROS2 and PX4 in order to control a simulated UAV's velocity with keyboard controls. The goal is to create a simple example that a complete beginner can follow and understand, even with no ROS2 or PX4 experience.
+## Descripción
+Este repositorio explica cómo usar ROS2 y PX4 para controlar la velocidad de un UAV simulado. Incluyendo comandos que nos sirvieron para solucionar errores tanto en la instalación como en la simulación.
 
-This repo is a derivative of Jaeyoung Lim's Offboard example
-https://github.com/Jaeyoung-Lim/px4-offboard
-
-I've taken his example and added some functionality. 
-
-## YouTube Tutorial
-We published a walkthrough tutorial on YouTube to demonstrate the example and to help beginners set up their enviornment. The video is helpful, but be sure to always defer to this Readme file for instructions. Some changes have been made since the video was posted, meaning that though it is helpful, it is not 100% accurate.
-
-You can watch the video [here](https://www.youtube.com/watch?v=8gKIP0OqHdQ).
-
-### Prerequisites
+### Requisitos
 * ROS2 Humble
-* PX4 Autopilot
+* PX4 Autopilot 1.15
 * Micro XRCE-DDS Agent
 * px4_msgs
 * Ubuntu 22.04
 * Python 3.10
 
 
-## Setup Steps
+## Pasos de configuración
 
-### Install PX4 Autopilot
-To [Install PX4](https://docs.px4.io/main/en/dev_setup/dev_env_linux_ubuntu.html#simulation-and-nuttx-pixhawk-targets) run this code 
+### Instalar PX4 Autopilot
+Ejecuta este código 
 ```
 git clone https://github.com/PX4/PX4-Autopilot.git --recursive -b release/1.15
 ```
 
-Run this script in a bash shell to install everything
+Ejecute este script en un shell bash para instalar todo
 
 ```
 bash ./PX4-Autopilot/Tools/setup/ubuntu.sh
 ```
 
-You will now need to restart your computer before continuing.
+Ahora deberá reiniciar su computadora antes de continuar.
 
 
-### Install ROS2 Humble
-To install ROS2 Humble follow the steps [here](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html)
+### Instalar ROS2 Humble
+Para instalar ROS2 Humble siga los pasos de [aquí](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html)
 
-### Install Dependencies
+### Instalar dependencias
 
-Install Python dependencies as mentioned in the [PX4 Docs](https://docs.px4.io/main/en/ros/ros2_comm.html#install-ros-2) with this code
+Instale las dependencias de Python como se menciona en el [PX4 Docs](https://docs.px4.io/main/en/ros/ros2_comm.html#install-ros-2) con este código.
 
 ```
 pip3 install --user -U empy pyros-genmsg setuptools
 ```
 
-I also found that without these packages installed Gazebo has issues loading
+También descubrimos que sin estos paquetes instalados, Gazebo tiene problemas para cargar.
 
 ```
 pip3 install kconfiglib
 pip install --user jsonschema
 pip install --user jinja2
 ```
+
+#### (Posible error)
+Si se presenta un error relacionado con pip3, ejecute los siguinetes comandos:
+
+```
+pip3 uninstall empy -y
+pip3 install empy==3.3.4
+```
+
 
 ### Build Micro DDS
 As mentioned in the [PX4 Docs](https://docs.px4.io/main/en/ros/ros2_comm.html#setup-micro-xrce-dds-agent-client) run this code in order to build MicroDDS on your machine
