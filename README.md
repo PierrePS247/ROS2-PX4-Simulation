@@ -1,5 +1,5 @@
 
-# ROS2-PX4-Simulation
+# Simulación ROS2-PX4
 
 ## Descripción
 Este repositorio explica cómo usar ROS2 y PX4 para controlar la velocidad de un UAV simulado. Incluyendo comandos que nos sirvieron para solucionar errores tanto en la instalación como en la simulación.
@@ -49,7 +49,7 @@ pip install --user jsonschema
 pip install --user jinja2
 ```
 
-#### (Posible error !)
+#### (Posible error ! )
 Si se presenta un error relacionado con pip3, ejecute los siguinetes comandos:
 
 ```
@@ -135,6 +135,25 @@ Después de ejecutar esto, no deberíamos tener que compilar px4_msgs nunca más
 colcon build --packages-select px4_offboard
 ```
 
+#### (Posible error ! )
+Si se presenta un error relacionado con colcon build, ejecute los siguinetes comandos:
+
+```
+rm -rf build install log
+colcon build --symlink-install
+```
+
+#### (Posible error ! )
+Si se presentan errores relacioandos a los paquetes: 'package not processed'
+Ejecute:
+
+```
+pip3 install --upgrade packaging
+pip3 uninstall setuptools packaging
+pip3 install setuptools packaging
+```
+
+
 Si intentaras ejecutar nuestro código ahora, no funcionaría. Esto se debe a que necesitamos obtener el código de nuestro espacio de trabajo actual. Esto siempre se hace después de una compilación. Para ello, asegúrate de estar en el directorio src y luego ejecuta este código.
 
 ```
@@ -151,6 +170,14 @@ Ejecute este código para iniciar el ejemplo
 
 ```
 ros2 launch px4_offboard offboard_velocity_control.launch.py
+```
+
+#### (Posible error ! )
+Si se presentan errores relacioandos al gazebo bridge: 'gz_bridge failed to start and spawn model'
+Ejecute:
+
+```
+sudo apt install ros-humble-gz-ros2-bridge
 ```
 
 This will run numerous things. In no particular order, it will run:
