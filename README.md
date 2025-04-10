@@ -72,81 +72,82 @@ sudo make install
 sudo ldconfig /usr/local/lib/
 ```
 
-### Setup Workspace
-This git repo is intended to be a ROS2 package that is cloned into a ROS2 workspace.
+### Configurar el espacio de trabajo
+Este repositorio git está destinado a ser un paquete ROS2 que se clona en un espacio de trabajo ROS2.
 
-We're going to create a workspace in our home directory, and then clone in this repo and also the px4_msgs repo. 
+Vamos a crear un espacio de trabajo en nuestro directorio de inicio y luego clonar en este repositorio y también en el repositorio px4_msgs.
 
-For more information on creating workspaces, see [here](https://docs.ros.org/en/humble/Tutorials/Workspace/Creating-A-Workspace.html)
+Para obtener más información sobre la creación de espacios de trabajo, consulte [aquí](https://docs.ros.org/en/humble/Tutorials/Workspace/Creating-A-Workspace.html)
 
-Run this code to create a workspace in your home directory
+Ejecute este código para crear un espacio de trabajo en su directorio de inicio
 
 ```
 mkdir -p ~/ros2_px4_offboard_example_ws/src
 cd ~/ros2_px4_offboard_example_ws/src
 ```
 
-*ros2_px4_offboard_example_ws* is just a name I chose for the workspace. You can name it whatever you want. But after we run *colcon build* you might have issues changing your workspace name so choose wisely.
+*ros2_px4_offboard_example_ws* es solo el nombre que elegí para el espacio de trabajo. Puedes nombrarlo como quieras. Sin embargo, después de ejecutar *colcon build*, podrías tener problemas para cambiar el nombre de tu espacio de trabajo, así que elige con cuidado.
 
-We are now in the src directory of our workspace. This is where ROS2 packages go, and is where we will clone in our two repos.
+Ahora estamos en el directorio src de nuestro espacio de trabajo. Aquí se almacenan los paquetes de ROS2 y donde clonaremos nuestros dos repositorios.
 
-### Clone in Packages
-We first will need the px4_msgs package. Our ROS2 nodes will rely on the message definitions in this package in order to communicate with PX4. Read [here](https://docs.px4.io/main/en/ros/ros2_comm.html#overview:~:text=ROS%202%20applications,different%20PX4%20releases) for more information.
+### Clonar en paquetes
+Primero necesitaremos el paquete px4_msgs. Nuestros nodos ROS2 se basarán en las definiciones de mensajes de este paquete para comunicarse con PX4. Lea [aquí](https://docs.px4.io/main/en/ros/ros2_comm.html#overview:~:text=ROS%202%20applications,different%20PX4%20releases) para más información.
 
-Be sure you're in the src directory of your workspace and then run this code to clone in the px4_msgs repo
+Asegúrate de estar en el directorio src de tu espacio de trabajo y luego ejecuta este código para clonar en el repositorio px4_msgs
 
 ```
 git clone https://github.com/PX4/px4_msgs.git -b release/1.15
 ```
 
-Once again be sure you are still in the src directory of your workspace. Run this code to clone in our example package
+Asegúrate de que sigues en el directorio src de tu espacio de trabajo. Ejecuta este código para clonar en nuestro paquete de ejemplo.
 
 ```
 git clone https://github.com/ARK-Electronics/ROS2_PX4_Offboard_Example.git
 ```
 
-Run this code to clone the repo
+Ejecute este código para clonar el repositorio
 
 
 
-### Building the Workspace
-The two packages in this workspace are px4_msgs and px4_offboard. px4_offboard is a ROS2 package that contains the code for the offboard control node that we will implement. It lives inside the ROS2_PX4_Offboard_Example directory.
+### Construyendo el espacio de trabajo
+Los dos paquetes en este espacio de trabajo son px4_msgs y px4_offboard. px4_offboard es un paquete de ROS2 que contiene el código del nodo de control externo que implementaremos. Se encuentra dentro del directorio ROS2_PX4_Offboard_Example.
 
-Before we build these two packages, we need to source our ROS2 installation. Run this code to do that
+Antes de compilar estos dos paquetes, necesitamos ubicar la instalación de ROS2. Ejecute este código para ello.
 
 ```
 source /opt/ros/humble/setup.bash
 ```
 
-This will need to be run in every terminal that wants to run ROS2 commands. An easy way to get around this, is to add this command to your .bashrc file. This will run this command every time you open a new terminal window.
+Esto deberá ejecutarse en cada terminal que desee ejecutar comandos de ROS2. Una forma sencilla de solucionarlo es añadir este comando a tu archivo .bashrc. Esto lo ejecutará cada vez que abras una nueva ventana de terminal.
 
-To build these two packages, you must be in workspace directory not in src, run this code to change directory from src to one step back i.e. root of your workspace and build the packages
+Para crear estos dos paquetes, debe estar en el directorio del espacio de trabajo, no en src, ejecute este código para cambiar el directorio de src a un paso atrás, es decir, la raíz de su espacio de trabajo y crear los paquetes.
 
 ```
 cd ..
 colcon build
 ```
-As mentioned in Jaeyoung Lim's [example](https://github.com/Jaeyoung-Lim/px4-offboard/blob/master/doc/ROS2_PX4_Offboard_Tutorial.md) you will get some warnings about setup.py but as long as there are no errors, you should be good to go.
+Recibirás algunas advertencias sobre setup.py pero mientras no haya errores, debería estar todo bien.
 
 
-After this runs, we should never need to build px4_msgs again. However, we will need to build px4_offboard every time we make changes to the code. To do this, and save time, we can run
+Después de ejecutar esto, no deberíamos tener que compilar px4_msgs nunca más. Sin embargo, sí tendremos que compilar px4_offboard cada vez que modifiquemos el código. Para ello y ahorrar tiempo, podemos ejecutar
+
 ```
 colcon build --packages-select px4_offboard
 ```
 
-If you tried to run our code now, it would not work. This is because we need to source our current workspace. This is always done after a build. To do this, be sure you are in the src directory, and then run this code
+Si intentaras ejecutar nuestro código ahora, no funcionaría. Esto se debe a que necesitamos obtener el código de nuestro espacio de trabajo actual. Esto siempre se hace después de una compilación. Para ello, asegúrate de estar en el directorio src y luego ejecuta este código.
 
 ```
 source install/setup.bash
 ```
 
-We will run this every time we build. It will also need to be run in every terminal that we want to run ROS2 commands in.
+Lo ejecutaremos cada vez que compilemos. También deberá ejecutarse en cada terminal donde queramos ejecutar comandos de ROS2.
 
 
-### Running the Code
-This example has been designed to run from one launch file that will start all the necessary nodes. The launch file will run a python script that uses gnome terminal to open a new terminal window for MicroDDS and Gazebo.
+### Ejecutando el código
+Este ejemplo se ha diseñado para ejecutarse desde un archivo de inicio que iniciará todos los nodos necesarios. Este archivo ejecutará un script de Python que usa la terminal de Gnome para abrir una nueva ventana de terminal para MicroDDS y Gazebo.
 
-Run this code to start the example
+Ejecute este código para iniciar el ejemplo
 
 ```
 ros2 launch px4_offboard offboard_velocity_control.launch.py
@@ -154,46 +155,43 @@ ros2 launch px4_offboard offboard_velocity_control.launch.py
 
 This will run numerous things. In no particular order, it will run:
 
-* processes.py in a new window
-   * MicroDDS in a new terminal window
-   * Gazebo will open in a second tab in the same terminal window
-      * Gazebo GUI will open in it's own window
-* control.py in a new window
-   * Sends ROS2 Teleop commands to the /offboard_velocity_cmd topic based on keyboard input
-* RVIZ will open in a new window
-* velocity_control.py runs as it's own node, and is the main node of this example
+* process.py en una nueva ventana
+   * MicroDDS en una nueva ventana de terminal
+   * Gazebo se abrirá en una segunda pestaña de la misma ventana de terminal
+      * La interfaz gráfica de Gazebo se abrirá en su propia ventana
+* control.py en una nueva ventana
+   * Envía comandos ROS2 Teleop al tema /offboard_velocity_cmd según la entrada del teclado
+* RVIZ se abrirá en una nueva ventana
+* velocity_control.py se ejecuta como un nodo propio y es el nodo principal de este ejemplo
 
-Once everything is running, you should be able to focus into the control.py terminal window, arm, and takeoff. The controls mimic Mode 2 RC Transmitter controls with WASD being the left joystick and the arrow keys being the right joystick. The controls are as follows:
-* W: Up
-* S: Down
-* A: Yaw Left
-* D: Yaw Right
-* Up Arrow: Pitch Forward
-* Down Arrow: Pitch Backward
-* Left Arrow: Roll Left
-* Right Arrow: Roll Right
-* Space: Arm/Disarm
+Una vez que todo esté en funcionamiento, debería poder centrarse en la ventana de terminal control.py, armar y despegar. Los controles imitan los del transmisor RC Modo 2, con WASD como joystick izquierdo y las teclas de flecha como joystick derecho. Los controles son los siguientes:
+* W: Arriba
+* S: Abajo
+* A: Guiñada a la izquierda
+* D: Guiñada a la derecha
+* Flecha arriba: Inclinación hacia adelante
+* Flecha abajo: Inclinación hacia atrás
+* Flecha izquierda: Giro a la izquierda
+* Flecha derecha: Giro a la derecha
+* Espacio: Activar/Desactivar
 
-Pressing *Space* will arm the drone. Wait a moment and it will takeoff and switch into offboard mode. You can now control it using the above keys. If you land the drone, it will disarm and to takeoff again you will need to toggle the arm switch off and back on with the space bar. 
+Al pulsar *Espacio* se armará el dron. Espere un momento y despegará y pasará al modo fuera de borda. Ahora puede controlarlo con las teclas anteriores. Si aterriza el dron, se desarmará y, para despegar de nuevo, deberá activar y desactivar el interruptor del brazo con la barra espaciadora.
 
-Using the controls, click *W* to send a vertical veloctiy command and take off. Once in the air you can control it as you see fit.
+Con los controles, pulsa *W* para enviar una señal de velocidad vertical y despegar. Una vez en el aire, puedes controlarlo como prefieras.
 
-## Closing Simulation *IMPORTANT*
-When closing the simulation, it is very tempting to just close the terminal windows. However, this will leave Gazebo running in the background, potentially causing issues when you run Gazebo in the future. To correctly end the Gazebo simulation, go to it's terminal window and click *Ctrl+C*. This will close Gazebo and all of it's child processes. Then, you can close the other terminal windows.
+## Cerrar la simulación *IMPORTANTE*
+Al cerrar la simulación, es muy tentador cerrar las ventanas de terminal. Sin embargo, esto dejará a Gazebo ejecutándose en segundo plano, lo que podría causar problemas al ejecutarlo en el futuro. Para finalizar correctamente la simulación de Gazebo, vaya a la ventana de terminal y presione *Ctrl+C*. Esto cerrará Gazebo y todos sus procesos secundarios. Después, puede cerrar las demás ventanas de terminal.
  
 
- ## Explanation of processes.py
- This code runs each set of bash commands in a new tab of a gnome terminal window. It assumes that your PX4 installation is accessible from your root directory, and it is using the gz_x500 simulation. There is no current implementation to change these commands when running the launch file, however you can modify the command string within processes.py to change these values to what you need.
+ ## Explicación de processes.py
+ Este código ejecuta cada conjunto de comandos bash en una nueva pestaña de la terminal de Gnome. Se asume que la instalación de PX4 es accesible desde el directorio raíz y que utiliza la simulación gz_x500. No existe una implementación actual para cambiar estos comandos al ejecutar el archivo de inicio; sin embargo, puede modificar la cadena de comandos en el archivo process.py para ajustar estos valores a sus necesidades.
 
- If line 17 of processes.py were uncommented
+ Si la línea 17 de process.py no estuviera comentada
 ```
 17     # "cd ~/QGroundControl && ./QGroundControl.AppImage"
 ```
-then QGroundControl would run in a new tab of the terminal window and the QGroundControl GUI would then open up. This is commented out by default because it is not necessary for the simulation to run, but it is useful for debugging, and is a simple example showing how to add another command to the launch file.
+Luego, QGroundControl se ejecutará en una nueva pestaña de la ventana del terminal y se abrirá la interfaz gráfica de usuario de QGroundControl. Esto está comentado por defecto, ya que no es necesario para la ejecución de la simulación, pero es útil para la depuración y es un ejemplo sencillo que muestra cómo agregar otro comando al archivo de inicio.
 
-## Known Issues
-If the vehicle does not arm when you press Enter, check to ensure the parameter NAV_DLL_ACT is set to 0. You may need to download QGroundControl and disable this parameter if you want to run this demo without needing QGC open.
-
-## Questions
-Join the ARK Electronics Discord [here](https://discord.gg/TDJzJxUMRX) for more help and to stay up to date on our projects.
+## Problemas conocidos
+Si el vehículo no se arma al presionar Enter, verifique que el parámetro NAV_DLL_ACT esté configurado en 0. Es posible que necesite descargar QGroundControl y deshabilitar este parámetro si desea ejecutar esta demostración sin necesidad de tener QGC abierto.
 
